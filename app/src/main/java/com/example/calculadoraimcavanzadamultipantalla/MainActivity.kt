@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    } //ojo
+    }
 
     @Composable
     fun AppNavegacion() {
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 
             //Ruta 2: Pantalla que recibe el nombre y el IMC calculado
             composable("resultado/{nombre}/{imc}") { backStackEntry ->
-                val nombre = backStackEntry.arguments?.getString("nombre") ?: "Usuario"
+                val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
                 val imc = backStackEntry.arguments?.getString("imc")?.toDoubleOrNull() ?: 0.0
                 PantallaResultado(navController, nombre, imc)
             }
@@ -119,8 +119,8 @@ class MainActivity : ComponentActivity() {
             // Muestra un mensaje cuando los datos no son válidos
             if (error) {
                 Text(
-                    text = "Por favor, ingresa valores válidos",
-                    color = Color.Red,
+                    text = "Por favor, completa todos los campos correctamente",
+                    color = Color.Blue,
                 )
             }
 
@@ -133,12 +133,13 @@ class MainActivity : ComponentActivity() {
 
                     // Condición que verifica que peso y altura sean números válidos
                     if (
-                        pesoNumero == null ||
-                        alturaNumero == null ||
-                        pesoNumero <= 0 ||
-                        alturaNumero <= 0
+                        nombre.isBlank() ||
+                        pesoNumero == null || pesoNumero <=0 ||
+                        alturaNumero == null || alturaNumero <= 0
+
                     ) {
                         error = true
+
                     } else {
                         error = false
 
@@ -182,10 +183,10 @@ class MainActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(20.dp))
 
             // Mensaje que se muestra al usuario
-            Text("Hola $nombre, tu resultado es:", fontSize = 24.sp)
+            Text("Hola $nombre, tu resultado", fontSize = 24.sp)
             Spacer(modifier = Modifier.height(15.dp))
 
-            Text("Tu IMC es ${String.format(Locale.US,"%.1f", imc)} tienes: ", fontSize = 26.sp, fontWeight = FontWeight.Bold)//número
+            Text("IMC de ${String.format(Locale.US,"%.1f", imc)} tienes: ", fontSize = 26.sp, fontWeight = FontWeight.Bold)//número
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(categoria, fontSize = 28.sp, color = colorCategoria, fontWeight = FontWeight.Bold) //categoria
